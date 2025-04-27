@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>MH MODS OFC</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      height: 100vh;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: black;
+    }
+
+    canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: -1;
+    }
+
+    .container {
+      background: rgba(0, 0, 0, 0.7);
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 8px 25px rgba(0, 255, 0, 0.5);
+      width: 400px;
+      text-align: center;
+      animation: fadeIn 1s ease-in-out;
+    }
+
+    h1 {
+      font-size: 36px;
+      margin-bottom: 20px;
+      font-weight: 600;
+    }
+
+    h2 {
+      font-size: 24px;
+      margin-bottom: 20px;
+      color: #0f0;
+    }
+
+    input[type="text"] {
+      width: 90%;
+      padding: 12px;
+      margin: 12px 0;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 16px;
+    }
+
+    button {
+      padding: 12px 35px;
+      background-color: #28a745;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+      cursor: pointer;
+      margin-top: 10px;
+      transition: background 0.3s;
+    }
+
+    button:hover {
+      background-color: #218838;
+    }
+
+    #result {
+      margin-top: 20px;
+      text-align: left;
+      background: #111;
+      padding: 15px;
+      border-radius: 10px;
+      max-height: 300px;
+      overflow-y: auto;
+      font-size: 15px;
+      color: #0f0;
+    }
+
+    .follow-text {
+      margin-top: 30px;
+      font-size: 18px;
+      font-weight: bold;
+      color: #0f0;
+    }
+
+    .social-links {
+      margin-top: 10px;
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+    }
+
+    .social-links a img {
+      width: 40px;
+      height: 40px;
+      animation: blink 1s infinite alternate;
+    }
+
+    @keyframes blink {
+      from { opacity: 1; }
+      to { opacity: 0.5; }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+
+<canvas id="matrix"></canvas>
+
+<div class="container">
+  <h1>MH MODS OFC</h1>
+  <h2>Hasi SIM Data</h2>
+  <input type="text" id="number" placeholder="Enter Your Number with Country Code">
+  <br>
+  <button onclick="queryNumber()">Search</button>
+  <div id="result"></div>
+
+  <div class="follow-text">Follow My Channels</div>
+  <div class="social-links">
+    <a href="https://youtube.com/@mhmodsofc" target="_blank">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/4/42/YouTube_icon_%282013-2017%29.png" alt="YouTube">
+    </a>
+    <a href="https://whatsapp.com/channel/0029VasNvD33mFXwqrkFzZ3u" target="_blank">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp">
+    </a>
+    <a href="https://t.me/MHMODSOFC" target="_blank">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/8/82/Telegram_logo.svg" alt="Telegram">
+    </a>
+  </div>
+</div>
+
+<script>
+  function queryNumber() {
+    const number = document.getElementById('number').value.trim(); 
+    const resultDiv = document.getElementById('result');
+
+    if (number === "") {
+      resultDiv.innerHTML = "<span style='color:red;'>Please enter a number!</span>";
+      return;
+    }
+
+    const url = `https://api.allorigins.win/get?url=${encodeURIComponent('https://fam-official.serv00.net/sim/api.php?num=' + number)}`;
+    resultDiv.innerHTML = "Loading...";
+
+    fetch(url)
+      .then(response => response.json())
+      .then(data => {
+        const contents = data.contents;
+        resultDiv.innerText = contents || "No data found!";
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        resultDiv.innerHTML = "<span style='color:red;'>Failed to fetch data. Try again later.</span>";
+      });
+  }
+
+  // Matrix Effect Background
+  const canvas = document.getElementById('matrix');
+  const ctx = canvas.getContext('2d');
+
+  canvas.height = window.innerHeight;
+  canvas.width = window.innerWidth;
+
+  const letters = "01".split("");
+  const fontSize = 16;
+  const columns = canvas.width / fontSize;
+  const drops = Array(Math.floor(columns)).fill(1);
+
+  function drawMatrix() {
+    ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    ctx.fillStyle = "#0F0";
+    ctx.font = fontSize + "px monospace";
+
+    for (let i = 0; i < drops.length; i++) {
+      const text = letters[Math.floor(Math.random() * letters.length)];
+      ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+      if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+        drops[i] = 0;
+      }
+
+      drops[i]++;
+    }
+  }
+
+  setInterval(drawMatrix, 35);
+</script>
+
+</body>
+</html>
