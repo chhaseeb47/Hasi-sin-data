@@ -4,8 +4,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>HASI SIM DATABASE</title>
-
-  <!-- Google Font -->
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet"/>
 
   <style>
@@ -38,9 +36,9 @@
       border: 1px solid rgba(255, 255, 255, 0.1);
       box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
       border-radius: 20px;
-      padding: 40px 30px;
-      width: 90%;
-      max-width: 400px;
+      padding: 50px 40px;
+      width: 95%;
+      max-width: 500px;
       text-align: center;
       backdrop-filter: blur(10px);
     }
@@ -67,6 +65,13 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
+    }
+
+    .image-above-button {
+      width: 100%;
+      margin-bottom: 10px;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(255,255,255,0.3);
     }
 
     input {
@@ -163,7 +168,6 @@
 </head>
 
 <body>
-
   <div class="container">
     <h1>𝐇𝐀𝐒𝐈 𝐒𝐈𝐌 𝐃𝐀𝐓𝐀</h1>
 
@@ -178,59 +182,64 @@
       <button type="button" class="whatsapp-btn">Chat on WhatsApp</button>
     </a>
 
+    <!-- Image above Join WhatsApp Channel button -->
+    <img class="image-above-button" src="https://files.catbox.moe/h15784.jpg" alt="Join Image"/>
+
     <a href="https://whatsapp.com/channel/0029VasNvD33mFXwqrkFzZ3u" target="_blank">
       <button type="button" class="whatsapp-btn">Join WhatsApp Channel</button>
     </a>
+
     <a href="https://youtube.com/@mhmodsofc" target="_blank">
       <button type="button" class="whatsapp-btn">Subscribe YouTube Channel</button>
     </a>
+
     <div id="responseBox" class="response-box"></div>
   </div>
-<script>
-  const fetchButton = document.getElementById("fetchData");
-  const responseBox = document.getElementById("responseBox");
 
-  fetchButton.addEventListener("click", async () => {
-    const number = document.getElementById("number").value.trim();
-    responseBox.innerHTML = '';
+  <script>
+    const fetchButton = document.getElementById("fetchData");
+    const responseBox = document.getElementById("responseBox");
 
-    if (!number) {
-      alert("Please enter a valid number.");
-      return;
-    }
+    fetchButton.addEventListener("click", async () => {
+      const number = document.getElementById("number").value.trim();
+      responseBox.innerHTML = '';
 
-    responseBox.innerHTML = '<p style="text-align:center;">Fetching data...</p>';
-
-    const url = `https://api.allorigins.win/get?url=${encodeURIComponent(`https://fam-official.serv00.net/sim/api.php?num=${number}`)}`;
-
-    try {
-      const response = await fetch(url);
-      const result = await response.json();
-      const apiData = JSON.parse(result.contents);
-
-      if (apiData.status === "success" && apiData.data.length > 0) {
-        let formattedData = '';
-        apiData.data.forEach(user => {
-          formattedData += `
-            <div class="formatted-data">
-              <p><strong>🔹 Name:</strong> ${user.Name || "N/A"}</p>
-              <p><strong>🔹 Mobile:</strong> ${user.Mobile || "N/A"}</p>
-              <p><strong>🔹 CNIC:</strong> ${user.CNIC || "N/A"}</p>
-              <p><strong>🔹 Operator:</strong> ${user.Operator || "N/A"}</p>
-              <p><strong>🔹 Address:</strong> ${user.Address || "N/A"}</p>
-            </div>
-            <div class="separator"></div>
-          `;
-        });
-        responseBox.innerHTML = formattedData;
-      } else {
-        responseBox.innerHTML = `<div class="error">❌ No data found for this number</div>`;
+      if (!number) {
+        alert("Please enter a valid number.");
+        return;
       }
-    } catch (error) {
-      responseBox.innerHTML = `<div class="error">❌ API Error: ${error.message}</div>`;
-    }
-  });
-</script>
 
+      responseBox.innerHTML = '<p style="text-align:center;">Fetching data...</p>';
+
+      const url = `https://api.allorigins.win/get?url=${encodeURIComponent(`https://fam-official.serv00.net/sim/api.php?num=${number}`)}`;
+
+      try {
+        const response = await fetch(url);
+        const result = await response.json();
+        const apiData = JSON.parse(result.contents);
+
+        if (apiData.status === "success" && apiData.data.length > 0) {
+          let formattedData = '';
+          apiData.data.forEach(user => {
+            formattedData += `
+              <div class="formatted-data">
+                <p><strong>🔹 Name:</strong> ${user.Name || "N/A"}</p>
+                <p><strong>🔹 Mobile:</strong> ${user.Mobile || "N/A"}</p>
+                <p><strong>🔹 CNIC:</strong> ${user.CNIC || "N/A"}</p>
+                <p><strong>🔹 Operator:</strong> ${user.Operator || "N/A"}</p>
+                <p><strong>🔹 Address:</strong> ${user.Address || "N/A"}</p>
+              </div>
+              <div class="separator"></div>
+            `;
+          });
+          responseBox.innerHTML = formattedData;
+        } else {
+          responseBox.innerHTML = `<div class="error">❌ No data found for this number</div>`;
+        }
+      } catch (error) {
+        responseBox.innerHTML = `<div class="error">❌ API Error: ${error.message}</div>`;
+      }
+    });
+  </script>
 </body>
 </html>
